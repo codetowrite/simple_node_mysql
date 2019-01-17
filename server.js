@@ -29,23 +29,23 @@
 const http = require('http'); 
 const childProcess = require('child_process');
 
-// default port will do fine
-const port = 8080;
-
 // create a server instance. 
 var server = http.createServer();
 
 server.addListener('request', (request, response) => {
-
+    
     response.writeHead(200); // HTTP Status Code 200 - Okay.
     response.write("Server running"); 
     response.end(); // Finish and send the response.
-
+    
 });
 
 /**
  * At this point the server is set up and can start listening for connections.
  */
+
+// default port will do fine
+const port = 8080;
 server.listen(port); 
 console.log("The Node Server is running");
 
