@@ -28,15 +28,39 @@
  */
 const http = require('http'); 
 const childProcess = require('child_process');
+// import mysql drivers
+var mysql = require('mysql');
 
 // create a server instance. 
 var server = http.createServer();
 
+// create a connection (db handle)
+var dbConnection = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "password",
+    })
+dbConnection.connect(function(error) {
+        if(error) throw error;
+        console.log("DB Connection established");
+    })
+
 server.addListener('request', (request, response) => {
     
     response.writeHead(200); // HTTP Status Code 200 - Okay.
-    response.write("Server running"); 
-    response.end(); // Finish and send the response.
+    // response.write("Server running"); 
+
+    // create a sql query to display all items
+    let sqlQuery = "SELECT * FROM CTW_NODEMYSQL_TUTORIAL.ITEMS;";
+    // execute the query and handle result async
+    dbConnection.query(sqlQuery, (qError, qResult) => {
+        if(qError) {
+            response.write("DB Connection failed!");
+        } else {
+            response.write("DB Result: " + JSON.stringify(qResult));
+        }
+        response.end(); // Finish and send the response.
+    })
     
 });
 
